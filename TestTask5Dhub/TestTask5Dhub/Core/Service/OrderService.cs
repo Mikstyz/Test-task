@@ -1,0 +1,6 @@
+﻿using Serilog;
+
+namespace Service
+{
+
+}

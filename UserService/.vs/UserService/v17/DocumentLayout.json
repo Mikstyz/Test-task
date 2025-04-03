@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\code\\GIthub\\Test-task\\UserService\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5330675E-55A4-21C8-14E0-9D8CC9DCA822}|..\\ProductService\\ProductService.csproj|e:\\code\\github\\test-task\\productservice\\controller\\generalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5330675E-55A4-21C8-14E0-9D8CC9DCA822}|..\\ProductService\\ProductService.csproj|e:\\code\\github\\test-task\\productservice\\core\\entities\\productentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductEntities.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\ProductService\\Core\\Entities\\ProductEntities.cs",
+              "RelativeDocumentMoniker": "..\\ProductService\\Core\\Entities\\ProductEntities.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\ProductService\\Core\\Entities\\ProductEntities.cs",
+              "RelativeToolTip": "..\\ProductService\\Core\\Entities\\ProductEntities.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-03T13:29:01.424Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GeneralController.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\ProductService\\Controller\\GeneralController.cs",
+              "RelativeDocumentMoniker": "..\\ProductService\\Controller\\GeneralController.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\ProductService\\Controller\\GeneralController.cs",
+              "RelativeToolTip": "..\\ProductService\\Controller\\GeneralController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-03T13:28:40.778Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

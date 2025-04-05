@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "ProductService";
+
+package product;
+
+// Сервис для работы с товарами
+service ProductService {
+    // Проверка наличия товара
+    rpc CheckAvailability (CheckAvailabilityRequest) returns (CheckAvailabilityResponse);
+    
+    // Создание заказа с проверкой наличия товаров
+    rpc CreateOrderInProduct (CreateOrderRequest) returns (CreateOrderResponse);
+}
+
+// Запрос для проверки наличия товара
+message CheckAvailabilityRequest {
+    string product_id = 1; // ID товара
+}
+
+// Ответ на проверку наличия товара
+message CheckAvailabilityResponse {
+    bool available = 1;  // Признак наличия товара
+    int32 quantity = 2;  // Количество товара
+}
+
+// Запрос для создания заказа
+message CreateOrderRequest {
+    repeated int32 product_ids = 1; // Список ID товаров для заказа
+}
+
+// Ответ на создание заказа
+message CreateOrderResponse {
+    bool available = 1;  // Признак успешного создания заказа
+}

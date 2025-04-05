@@ -25,7 +25,7 @@ namespace Controller
             try
             {
                 Log.Information($"Попытка получить все заказы для user_id={userId}, offset={offset}");
-                var orders = await Orderdb.getAllByUserId(userId, offset, 20);
+                var orders = await Orderdb.GetAllByUserId(userId, offset, 20);
                 if (orders == null)
                 {
                     Log.Error($"Ошибка при получении заказов для user_id={userId}");
@@ -61,9 +61,9 @@ namespace Controller
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateOrderDto dto)
         {
-            Log.Information($"POST запрос на создание заказа для user_id={dto.UserId} с товарами={string.Join(",", dto.ProductIds)}");
+            Log.Information($"POST запрос на создание заказа для user_id={dto.UserId} с товарами={string.Join(", ", dto.ProductsIds.Select(p => $"productId={p.productId}, quantity={p.Quantity}"))}");
 
-            int orderId = await _orderService.create(dto.UserId, dto.ProductIds);
+            int orderId = await _orderService.Create(dto.UserId, dto.ProductsIds);
             if (orderId <= 0)
             {
                 Log.Warning($"Не удалось создать заказ для user_id={dto.UserId}");
@@ -72,7 +72,6 @@ namespace Controller
 
             return CreatedAtAction(nameof(GetById), new { id = orderId }, new { id = orderId });
         }
-
 
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)

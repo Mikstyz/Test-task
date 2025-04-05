@@ -1,5 +1,7 @@
 ﻿using Entities.Order;
+using Entities.Product;
 using Npgsql;
+using NpgsqlTypes;
 using Serilog;
 using SQLDataContext;
 
@@ -7,16 +9,17 @@ namespace Repositories
 {
     public class Orderdb
     {
-        public static async Task<IEnumerable<Order>> getAllByUserId(int userId, int offset = 0, int limit = 20)
+        public static async Task<IEnumerable<Order>> GetAllByUserId(int userId, int offset = 0, int limit = 20)
         {
-            const string query = @"SELECT o.id, o.user_id, 
-                                    COALESCE(array_agg(op.product_id) FILTER (WHERE op.product_id IS NOT NULL), '{}') AS product_ids
-                                    FROM orders o
-                                    LEFT JOIN order_products op ON o.id = op.order_id
-                                    WHERE o.user_id = @user_id
-                                    GROUP BY o.id, o.user_id
-                                    ORDER BY o.id
-                                    LIMIT @limit OFFSET @offset";
+            const string query = @"
+                SELECT o.id, o.user_id, 
+                    COALESCE(array_agg((op.product_id, op.product_quantity)) FILTER (WHERE op.product_id IS NOT NULL), '{}') AS product_ids
+                FROM orders o
+                LEFT JOIN order_products op ON o.id = op.order_id
+                WHERE o.user_id = @user_id
+                GROUP BY o.id, o.user_id
+                ORDER BY o.id
+                LIMIT @limit OFFSET @offset";
 
             try
             {
@@ -39,14 +42,16 @@ namespace Repositories
                     {
                         Id = reader.GetInt32(0),
                         UserId = reader.GetInt32(1),
-                        ProductIds = reader.IsDBNull(2) ? new List<int>() : ((int[])reader.GetValue(2)).Where(id => id != null).ToList()});
+                        ProductIds = reader.IsDBNull(2) ? new List<(int, int)>() : ((object[])reader.GetValue(2))
+                            .Select(item => ((int, int))item)
+                            .ToList()
+                    });
                 }
 
                 if (orders.Count == 0)
                 {
                     Log.Warning($"Заказы для пользователя с id={userId} не найдены");
                 }
-
                 else
                 {
                     Log.Information($"Найдено {orders.Count} заказов для пользователя с id={userId}");
@@ -54,7 +59,6 @@ namespace Repositories
 
                 return orders;
             }
-
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при обращении к базе данных\n{ex}");
@@ -62,16 +66,15 @@ namespace Repositories
             }
         }
 
-
         public static async Task<Order> GetById(int id)
         {
             const string query = @"
-                    SELECT o.id, o.user_id, 
-                    COALESCE(array_agg(op.product_id) FILTER (WHERE op.product_id IS NOT NULL), '{}') AS product_ids
-                    FROM orders o
-                    LEFT JOIN order_products op ON o.id = op.order_id
-                    WHERE o.id = @id
-                    GROUP BY o.id, o.user_id;";
+                SELECT o.id, o.user_id, 
+                    COALESCE(array_agg((op.product_id, op.product_quantity)) FILTER (WHERE op.product_id IS NOT NULL), '{}') AS product_ids
+                FROM orders o
+                LEFT JOIN order_products op ON o.id = op.order_id
+                WHERE o.id = @id
+                GROUP BY o.id, o.user_id;";
 
             try
             {
@@ -90,7 +93,7 @@ namespace Repositories
                     {
                         Id = reader.GetInt32(0),
                         UserId = reader.GetInt32(1),
-                        ProductIds = reader.IsDBNull(2) ? new List<int>() : reader.GetFieldValue<int[]>(2).ToList()
+                        ProductIds = reader.IsDBNull(2) ? new List<(int, int)>() : ((object[])reader.GetValue(2)).Select(item => ((int, int))item).ToList()
                     };
 
                     Log.Information($"Заказ с id={id} успешно получен");
@@ -108,24 +111,23 @@ namespace Repositories
             }
         }
 
-
-        public static async Task<int> Create(int userId, int[] productIds)
+        public static async Task<int> Create(int userId, List<productsIds> productIds)
         {
-            Log.Information($"Параметры запроса: user_id={userId}, product_ids={string.Join(",", productIds)}");
+            Log.Information($"Параметры запроса: user_id={userId}, product_ids={string.Join(",", productIds.Select(p => $"{p.productId}-{p.Quantity}"))}");
 
             const string query = @"
-                            BEGIN;
-                            WITH new_order AS (
-                                INSERT INTO orders (user_id)
-                                VALUES (@user_id)
-                                RETURNING id
-                            )
-                            SELECT id FROM new_order;
-                            COMMIT;";
+                        BEGIN;
+                        WITH new_order AS (
+                            INSERT INTO orders (user_id)
+                            VALUES (@user_id)
+                            RETURNING id
+                        )
+                        SELECT id FROM new_order;
+                        COMMIT;";
 
             try
             {
-                Log.Information($"Запрос на создание заказа для user_id={userId} с товарами={string.Join(",", productIds)}");
+                Log.Information($"Запрос на создание заказа для user_id={userId} с товарами={string.Join(",", productIds.Select(p => $"{p.productId}-{p.Quantity}"))}");
 
                 await using var conn = await DataContext.GetConnectionAsync();
                 await using var cmd = new NpgsqlCommand(query, conn);
@@ -142,20 +144,28 @@ namespace Repositories
 
                 int newOrderId = (int)orderId;
 
-                // Теперь добавляем товары в заказ
+
+                var productArray = productIds.Select(p => new { p.productId, p.Quantity }).ToArray();
+
                 const string insertProductsQuery = @"
-        INSERT INTO order_products (order_id, product_id)
-        SELECT @order_id, unnest(@product_ids);";
+                            INSERT INTO order_products (order_id, product_id, product_quantity)
+                            VALUES 
+                            (@order_id, @product_id, @product_quantity);";
 
-                await using var cmdProducts = new NpgsqlCommand(insertProductsQuery, conn);
-                cmdProducts.Parameters.AddWithValue("@order_id", newOrderId);
-                cmdProducts.Parameters.AddWithValue("@product_ids", productIds);
+                foreach (var product in productArray)
+                {
+                    await using var cmdProducts = new NpgsqlCommand(insertProductsQuery, conn);
+                    cmdProducts.Parameters.AddWithValue("@order_id", newOrderId);
+                    cmdProducts.Parameters.AddWithValue("@product_id", product.productId);
+                    cmdProducts.Parameters.AddWithValue("@product_quantity", product.Quantity);
 
-                await cmdProducts.ExecuteNonQueryAsync();
+                    await cmdProducts.ExecuteNonQueryAsync();
+                }
 
                 Log.Information($"Успешно создан заказ для user_id={userId} с id={newOrderId}");
                 return newOrderId;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при обращении к базе данных: {ex}");

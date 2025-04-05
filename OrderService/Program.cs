@@ -1,7 +1,7 @@
-using Serilog;
+﻿using Serilog;
 using Service;
 
-public class Prog
+public class ProgOrder
 {
     public static async Task Main(string[] args)
     {
@@ -11,7 +11,7 @@ public class Prog
     public static async Task Hosting(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .MinimumLevel.Information()
             .WriteTo.Console()
             .CreateLogger();
 
@@ -21,15 +21,32 @@ public class Prog
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Используем Serilog для логирования
             builder.Host.UseSerilog();
 
+            // Добавляем сервисы
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<OrderService>();
+
+            builder.Services.AddHttpClient<OrderService>();
 
             builder.Services.AddAuthorization();
-
             builder.Services.AddControllers();
+
+            // Настройка Kestrel для работы только с HTTP/1.1 и портом 5006
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ConfigureHttpsDefaults(config =>
+                {
+                    config.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+                });
+
+                // Отключаем HTTP/2
+                options.ListenAnyIP(5006, listenOptions =>
+                {
+                    listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
+                });
+            });
 
             var app = builder.Build();
 
@@ -39,8 +56,7 @@ public class Prog
                 app.UseHsts();
             }
 
-            app.UseRouting();
-
+            // Используем Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -48,8 +64,11 @@ public class Prog
                 c.RoutePrefix = string.Empty;
             });
 
+            // Основной роутинг и обработка контроллеров
+            app.UseRouting();
             app.MapControllers();
 
+            // Запуск приложения
             app.Run();
         }
         catch (Exception ex)

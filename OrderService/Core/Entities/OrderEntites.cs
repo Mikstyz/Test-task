@@ -8,7 +8,7 @@ namespace Entities.Order
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public List<int> ProductIds{get; set;}
+        public List<(int orderId, int Quantity)> ProductIds{get; set;}
     }
 
     public class UpdateOrder
@@ -16,6 +16,6 @@ namespace Entities.Order
         public int Id { get; set; }
         public int UserId { get; set; }
 
-        public List<int> NewProductIds { get; set; }
+        public List<(int orderId, int Quantity)> NewProductIds { get; set; }
     }
 }

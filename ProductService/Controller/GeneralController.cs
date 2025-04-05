@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repositories.Product;
 using Serilog;
 using Service;
+using gRCP;
 
 namespace Controller
 {
@@ -11,9 +12,9 @@ namespace Controller
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly ProductManager _productService;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(ProductManager productService)
         {
             _productService = productService;
         }
@@ -77,6 +78,45 @@ namespace Controller
             return Ok(product);
         }
 
+        #region gRCP
+        [HttpPost("check-availability")]
+        public async Task<IActionResult> CheckAvailability([FromBody] CheckAvailabilityDto request)
+        {
+            if (request == null || request.Quantity <= 0)
+            {
+                return BadRequest("Некорректные данные запроса.");
+            }
+
+            bool isAvailable = await grspManager.CheckProductCount(request.productId, request.Quantity);
+
+            if (isAvailable)
+            {
+                return Ok(new { available = true });
+            }
+
+            return Ok(new { available = false });
+        }
+
+
+        [HttpPost("Create-order")]
+        public async Task<IActionResult> CreateOrderInProduct([FromBody] CreateOrderDto request)
+        {
+            if (request == null || request.ProductsIds == null || request.ProductsIds.Count <= 0)
+            {
+                return BadRequest("Некорректные данные запроса.");
+            }
+
+            bool status = await grspManager.CreateOrderInProduct(request.ProductsIds);
+
+            if (status)
+            {
+                return Ok(new { Create = true });
+            }
+
+            return Ok(new { Create = false });
+        }
+
+        #endregion
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchProducts([FromQuery] SearchProductDto searchDto)

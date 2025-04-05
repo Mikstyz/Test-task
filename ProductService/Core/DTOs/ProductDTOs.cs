@@ -1,5 +1,18 @@
-﻿namespace DTOs.Product
+﻿using Entities.Product;
+
+namespace DTOs.Product
 {
+    public class CheckAvailabilityDto
+    {
+        public int productId { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class CreateOrderDto
+    {
+        public List<productsIds> ProductsIds { get;set; }
+    }
+
     public class ProductDto
     {
         public int Seller { get; set; }

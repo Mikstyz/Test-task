@@ -4,7 +4,7 @@ using Serilog;
 
 namespace Service
 {
-    public class ProductService
+    public class ProductManager
     {
         public async Task<IEnumerable<product>> GetProducts(int offset, int limit = 20)
         {
@@ -23,6 +23,7 @@ namespace Service
                 Log.Information($"Успешно получено {products.Count()} продуктов");
                 return products;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal("Ошибка при получении списка продуктов\n{ex}");
@@ -47,6 +48,7 @@ namespace Service
                 Log.Information($"Продукт с id {id} успешно получен");
                 return product;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при получении продукта по id {id}\n{ex}");
@@ -71,6 +73,7 @@ namespace Service
                 Log.Information($"Успешно найдено {products.Count()} продуктов");
                 return products;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при поиске продуктов\n{ex}");
@@ -95,6 +98,7 @@ namespace Service
                 Log.Information($"Продукт {newProduct.Name} успешно создан с id {productId}");
                 return productId;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при создании продукта\n{ex}");
@@ -143,6 +147,7 @@ namespace Service
                 Log.Information($"Продукт с id {id} успешно удален");
                 return true;
             }
+
             catch (Exception ex)
             {
                 Log.Fatal($"Ошибка при удалении продукта с id {id}\n{ex}");

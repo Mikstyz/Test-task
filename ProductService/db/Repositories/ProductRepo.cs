@@ -162,6 +162,87 @@ namespace Repositories.Product
             }
         }
 
+
+
+        #region gRCP operation
+        public static async Task<bool> Availability(int productId, int count)
+        {
+            const string query = "SELECT quantity FROM products WHERE id = @id";
+
+            try
+            {
+                Log.Information("Получение информации о наличии товара");
+
+                await using var conn = await DataContext.GetConnectionAsync();
+                await using var cmd = new NpgsqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@id", productId);
+
+                var result = await cmd.ExecuteScalarAsync();
+
+                if (result == null || result == DBNull.Value)
+                {
+                    Log.Warning($"Товар с id {productId} не найден");
+                    return false;
+                }
+
+                int dbCount = Convert.ToInt32(result);
+
+                if (dbCount < count)
+                {
+                    Log.Information($"Кол-во товара {dbCount} меньше, чем нужно {count}");
+                    return false;
+                }
+
+                Log.Information($"Кол-во товара {dbCount} достаточно для запроса {count}");
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                Log.Error($"Ошибка при проверке наличия товара с id {productId}\n{ex}");
+                return false;
+            }
+        }
+
+        public static async Task<bool> UpdateProductQuantities(List<productsIds> productIds)
+        {
+            const string query = "UPDATE products SET quantity = quantity - @quantity WHERE id = @id AND quantity >= @quantity";
+
+            try
+            {
+                await using var conn = await DataContext.GetConnectionAsync();
+                await using var transaction = await conn.BeginTransactionAsync();
+
+                foreach (var product in productIds)
+                {
+                    await using var cmd = new NpgsqlCommand(query, conn, (NpgsqlTransaction)transaction);
+                    cmd.Parameters.AddWithValue("@id", product.productId);
+                    cmd.Parameters.AddWithValue("@quantity", product.Quantity);
+
+                    // Выполняем обновление количества
+                    var rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    if (rowsAffected == 0)
+                    {
+                        Log.Error($"Не удалось уменьшить количество товара с id {product.productId} на {product.Quantity}. Недостаточно товара.");
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+                }
+
+                await transaction.CommitAsync();
+                Log.Information("Количество товаров успешно обновлено.");
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                Log.Fatal($"Ошибка при уменьшении количества товаров: {ex}");
+                return false;
+            }
+        }
+        #endregion
+
         public static async Task<int> create(int seller,string name, string Description, double price, int quantity)
         {
             const string query = "INSERT INTO products (seller, name, description, price, quantity) VALUES (@seller, @name, @description, @price, @quantity) RETURNING id";

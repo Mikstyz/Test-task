@@ -1,6 +1,11 @@
 ﻿
 namespace Entities.Product
 {
+    public class productsIds
+    {
+        public int productId { get; set; }
+        public int Quantity { get; set; }
+    }
     public class product //get \ create
     {
         public int Seller { get; set; }

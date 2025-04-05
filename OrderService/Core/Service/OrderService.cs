@@ -1,15 +1,30 @@
 ﻿using Serilog;
 using Repositories;
 using Entities.Order;
+using Entities.Product;
+using Entities.gRCP;
+using DTOs.Order;
 
 namespace Service
 {
     public class OrderService
     {
+        private readonly HttpClient _client;
+
+        public OrderService(HttpClient httpClient, ILogger<OrderService> logger)
+        {
+            _client = httpClient;
+            _client.BaseAddress = new Uri("http://localhost:5004");
+            _client.DefaultRequestVersion = new Version(1, 1); // Только HTTP/1.1
+            _client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionExact; // Никаких других версий
+        }
+
+
+
         public async Task<IEnumerable<Order>> getAllbyUserId(int userId, int offset = 0)
         {
 
-            var orders = await Orderdb.getAllByUserId(userId, offset, 20);
+            var orders = await Orderdb.GetAllByUserId(userId, offset, 20);
 
             if (orders == null)
             {
@@ -37,37 +52,71 @@ namespace Service
         }
 
 
-        public async Task<int> create(int userId, int[] ProductIds)
+        public async Task<int> Create(int userId, List<productsIds> ProducstIds)
         {
-            Log.Information("Создание товара");
+            Log.Information("Создание заказа для пользователя {UserId}. Количество товаров: {ProductCount}", userId, ProducstIds.Count);
 
-
-            var OrderId = await Orderdb.Create(userId, ProductIds);
-
-            if (OrderId <= 0)
+            var createOrderRequest = new CreateOrderDto
             {
-                Log.Information("Не удалось создать товар");
-                return -1;
+                ProductsIds = ProducstIds
+            };
+
+            try
+            {
+                var response = await _client.PostAsJsonAsync("/api/products/Create-order", createOrderRequest);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    Log.Warning($"Ошибка при создании заказа для пользователя {userId}: запрос не удался.");
+                    return -1;
+                }
+
+                // Десериализуем ответ
+                var result = await response.Content.ReadFromJsonAsync<CreateOrderResponse>();
+
+                Log.Information(result.ToString());
+
+                if (result == null || !result.Create)
+                {
+                    Log.Information("Некоторые товары недоступны в требуемом количестве");
+                    return -1;
+                }
+
+
+                var orderId = await Orderdb.Create(userId, ProducstIds);
+
+                if (orderId <= 0)
+                {
+                    Log.Warning($"Не удалось создать заказ для пользователя {userId}");
+                    return -1;
+                }
+
+                Log.Information($"Успешное создание заказа с id {orderId} для пользователя {userId}");
+                return orderId;
             }
 
-            Log.Information("Успешное создание товара");
-            return OrderId;
+            catch (Exception ex)
+            {
+                Log.Error($"Ошибка при создании заказа для пользователя {userId}\n{ex}");
+                return -1;
+            }
         }
+
 
 
         public async Task<bool> delete(int id)
         {
-            Log.Information("Удаление товара");
+            Log.Information("Удаление заказа");
 
             var status = await Orderdb.delete(id);
 
             if (!status)
             {
-                Log.Information("Не удалось удалить товар");
+                Log.Information("Не удалось удалить заказ");
                 return false;
             }
 
-            Log.Information("Успешное удаление товара");
+            Log.Information("Успешное удаление заказа");
             return true;
         }
     }

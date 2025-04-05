@@ -21,10 +21,8 @@ public class ProgOrder
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Используем Serilog для логирования
             builder.Host.UseSerilog();
 
-            // Добавляем сервисы
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -41,7 +39,6 @@ public class ProgOrder
                     config.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                 });
 
-                // Отключаем HTTP/2
                 options.ListenAnyIP(5006, listenOptions =>
                 {
                     listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
@@ -56,7 +53,6 @@ public class ProgOrder
                 app.UseHsts();
             }
 
-            // Используем Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -64,7 +60,6 @@ public class ProgOrder
                 c.RoutePrefix = string.Empty;
             });
 
-            // Основной роутинг и обработка контроллеров
             app.UseRouting();
             app.MapControllers();
 

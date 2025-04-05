@@ -3,10 +3,13 @@
   "WorkspaceRootPath": "E:\\code\\GIthub\\Test-task\\UserService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5330675E-55A4-21C8-14E0-9D8CC9DCA822}|..\\ProductService\\ProductService.csproj|e:\\code\\github\\test-task\\productservice\\controller\\generalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29DDB621-43B4-22DA-0007-D356D7DB794A}|..\\NotificationService\\NotificationService.csproj|e:\\code\\github\\test-task\\notificationservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{66B55C5C-0CFC-5749-9E03-CA52809CECDB}|..\\OrderService\\OrderService.csproj|e:\\code\\github\\test-task\\orderservice\\core\\service\\orderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{29DDB621-43B4-22DA-0007-D356D7DB794A}|..\\NotificationService\\NotificationService.csproj|e:\\code\\github\\test-task\\notificationservice\\core\\service\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{66B55C5C-0CFC-5749-9E03-CA52809CECDB}|..\\OrderService\\OrderService.csproj|e:\\code\\github\\test-task\\orderservice\\core\\service\\kafka.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -16,32 +19,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GeneralController.cs",
-              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\ProductService\\Controller\\GeneralController.cs",
-              "RelativeDocumentMoniker": "..\\ProductService\\Controller\\GeneralController.cs",
-              "ToolTip": "E:\\code\\GIthub\\Test-task\\ProductService\\Controller\\GeneralController.cs",
-              "RelativeToolTip": "..\\ProductService\\Controller\\GeneralController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAYAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Kafka.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\Kafka.cs",
+              "RelativeDocumentMoniker": "..\\OrderService\\Core\\Service\\Kafka.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\Kafka.cs",
+              "RelativeToolTip": "..\\OrderService\\Core\\Service\\Kafka.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T15:51:45.753Z",
+              "WhenOpened": "2025-04-05T17:45:56.754Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "OrderService.cs",
-              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\OrderService.cs",
-              "RelativeDocumentMoniker": "..\\OrderService\\Core\\Service\\OrderService.cs",
-              "ToolTip": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\OrderService.cs",
-              "RelativeToolTip": "..\\OrderService\\Core\\Service\\OrderService.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAIwE4AAAA0AAAAAAAAAA==",
+              "Title": "Notification.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\NotificationService\\Core\\Service\\Notification.cs",
+              "RelativeDocumentMoniker": "..\\NotificationService\\Core\\Service\\Notification.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\NotificationService\\Core\\Service\\Notification.cs",
+              "RelativeToolTip": "..\\NotificationService\\Core\\Service\\Notification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T15:47:35.176Z",
+              "WhenOpened": "2025-04-05T17:44:31.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\NotificationService\\Program.cs",
+              "RelativeDocumentMoniker": "..\\NotificationService\\Program.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\NotificationService\\Program.cs",
+              "RelativeToolTip": "..\\NotificationService\\Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-05T17:44:10.491Z",
               "EditorCaption": ""
             }
           ]

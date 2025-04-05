@@ -4,6 +4,7 @@ using Entities.Order;
 using Entities.Product;
 using Entities.gRCP;
 using DTOs.Order;
+using Service.Kafka;
 
 namespace Service
 {
@@ -92,6 +93,11 @@ namespace Service
                 }
 
                 Log.Information($"Успешное создание заказа с id {orderId} для пользователя {userId}");
+
+
+                //Kafka message
+                var KafkaResult = await KafkaProducer.SendOrderToKafka(userId, orderId, ProducstIds);
+
                 return orderId;
             }
 

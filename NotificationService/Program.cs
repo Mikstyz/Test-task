@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Serilog;
 
 namespace Notification
 {
@@ -7,15 +8,15 @@ namespace Notification
 
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .CreateLogger();
 
 
+            //Read kafka message
+            KafkaConsumer.KafkaRead();
 
         }
-
-        public static void KadkaConn()
-        {
-
-        }
-
     }
 }

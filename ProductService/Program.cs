@@ -29,7 +29,7 @@ public class ProgProduct
             {
                 options.ListenLocalhost(5004, listenOptions =>
                 {
-                    listenOptions.Protocols = HttpProtocols.Http1; // Только HTTP/1.1
+                    listenOptions.Protocols = HttpProtocols.Http1;
                 });
             });
 
@@ -42,12 +42,10 @@ public class ProgProduct
 
             builder.Services.AddAuthorization();
 
-            // Добавляем поддержку gRPC
             builder.Services.AddScoped<ProductManager>();
             builder.Services.AddScoped<grspManager>();
             builder.Services.AddGrpc();
 
-            // Настройка Kestrel для работы только с HTTP/1.1
             builder.WebHost.ConfigureKestrel(options =>
             {
                 options.ConfigureHttpsDefaults(config =>
@@ -55,7 +53,6 @@ public class ProgProduct
                     config.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                 });
 
-                // Отключаем HTTP/2, используем только HTTP/1.1
                 options.ListenAnyIP(5005, listenOptions =>
                 {
                     listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;

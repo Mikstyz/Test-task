@@ -41,11 +41,13 @@ namespace Service.Kafka
                 Log.Information($"Сообщение в Kafka улетело в топик {Topic}. Order {orderId} для юзера {userId}, товары: {string.Join(", ", productIds.Select(p => $"{p.productId}:{p.Quantity}"))}");
                 return true;
             }
+
             catch (KafkaException ex)
             {
                 Log.Error($"Ошибка при работе с Kafka: {ex.Message}");
                 return false;
             }
+
             catch (Exception ex)
             {
                 Log.Error($"Пиздец, не удалось отправить сообщение в Kafka: {ex.Message}");

@@ -1,7 +1,8 @@
 ﻿using Grpc.Core;
 using ProductService;
+using static ProductService.ProductService;
 
-public class ProductServiceImpl : ProductService.ProductService.ProductServiceBase
+public class ProductServiceImpl : ProductServiceBase
 {
     // Реализация метода для проверки наличия товара
     public override Task<CheckAvailabilityResponse> CheckAvailability(CheckAvailabilityRequest request, ServerCallContext context)

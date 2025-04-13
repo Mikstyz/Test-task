@@ -3,13 +3,8 @@
   "WorkspaceRootPath": "E:\\code\\GIthub\\Test-task\\UserService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{29DDB621-43B4-22DA-0007-D356D7DB794A}|..\\NotificationService\\NotificationService.csproj|e:\\code\\github\\test-task\\notificationservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{29DDB621-43B4-22DA-0007-D356D7DB794A}|..\\NotificationService\\NotificationService.csproj|e:\\code\\github\\test-task\\notificationservice\\core\\service\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{66B55C5C-0CFC-5749-9E03-CA52809CECDB}|..\\OrderService\\OrderService.csproj|e:\\code\\github\\test-task\\orderservice\\core\\service\\kafka.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3B98574C-C3D9-E5A0-8677-20729192D278}|UserService.csproj|e:\\code\\github\\test-task\\userservice\\db\\repositories\\userrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B98574C-C3D9-E5A0-8677-20729192D278}|UserService.csproj|solutionrelative:db\\repositories\\userrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,45 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Kafka.cs",
-              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\Kafka.cs",
-              "RelativeDocumentMoniker": "..\\OrderService\\Core\\Service\\Kafka.cs",
-              "ToolTip": "E:\\code\\GIthub\\Test-task\\OrderService\\Core\\Service\\Kafka.cs",
-              "RelativeToolTip": "..\\OrderService\\Core\\Service\\Kafka.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T17:45:56.754Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Notification.cs",
-              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\NotificationService\\Core\\Service\\Notification.cs",
-              "RelativeDocumentMoniker": "..\\NotificationService\\Core\\Service\\Notification.cs",
-              "ToolTip": "E:\\code\\GIthub\\Test-task\\NotificationService\\Core\\Service\\Notification.cs",
-              "RelativeToolTip": "..\\NotificationService\\Core\\Service\\Notification.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T17:44:31.945Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\NotificationService\\Program.cs",
-              "RelativeDocumentMoniker": "..\\NotificationService\\Program.cs",
-              "ToolTip": "E:\\code\\GIthub\\Test-task\\NotificationService\\Program.cs",
-              "RelativeToolTip": "..\\NotificationService\\Program.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAgAAAAAAAAAA==",
+              "Title": "UserRepo.cs",
+              "DocumentMoniker": "E:\\code\\GIthub\\Test-task\\UserService\\db\\Repositories\\UserRepo.cs",
+              "RelativeDocumentMoniker": "db\\Repositories\\UserRepo.cs",
+              "ToolTip": "E:\\code\\GIthub\\Test-task\\UserService\\db\\Repositories\\UserRepo.cs",
+              "RelativeToolTip": "db\\Repositories\\UserRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T17:44:10.491Z",
+              "WhenOpened": "2025-04-13T15:54:01.039Z",
               "EditorCaption": ""
             }
           ]

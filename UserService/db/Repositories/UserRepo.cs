@@ -2,7 +2,6 @@
 using Npgsql;
 using Serilog;
 using SQLDataContext;
-using Entities.Auth;
 
 namespace Repositories.User
 {
@@ -44,17 +43,16 @@ namespace Repositories.User
 
         public static async Task<user> Authorization(string user_login, string user_password)
         {
-            const string query = "SELECT name, user_login, user_password FROM users WHERE user_login = @user_login AND user_password = @user_password";
+            const string query = "SELECT name, user_login, user_password FROM users WHERE user_login = @user_login";
 
             try
             {
-                Log.Information("Запрос в бд на авторизацию пользователя");
+                Log.Information("Запрос в БД на авторизацию пользователя");
 
                 await using var conn = await DataContext.GetConnectionAsync();
                 await using var cmd = new NpgsqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@user_login", user_login);
-                cmd.Parameters.AddWithValue("@user_password", user_password);
 
                 using var reader = await cmd.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
@@ -63,12 +61,20 @@ namespace Repositories.User
 
                     if (BCrypt.Net.BCrypt.Verify(user_password, storedHash))
                     {
-                        return new user()
-                    {
-                        Name = reader.GetString(0),
-                        Login = reader.GetString(1)
-                    };
+                        return new user
+                        {
+                            Name = reader.GetString(0),
+                            Login = reader.GetString(1)
+                        };
                     }
+                    else
+                    {
+                        Log.Warning("Неверный пароль для пользователя {UserLogin}", user_login);
+                    }
+                }
+                else
+                {
+                    Log.Warning("Пользователь {UserLogin} не найден", user_login);
                 }
 
                 return null;
@@ -79,6 +85,7 @@ namespace Repositories.User
                 return null;
             }
         }
+
 
         public static async Task<bool> Delete(int id)
         {
